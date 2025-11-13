@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client TTS Riva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .status.disconnected {
+            background: #fee;
+            color: #c33;
+            border: 2px solid #fcc;
+        }
+
+        .status.connected {
+            background: #efe;
+            color: #3c3;
+            border: 2px solid #cfc;
+        }
+
+        .status.processing {
+            background: #fef3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        #generateBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        #clearBtn {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        #clearBtn:hover {
+            background: #d0d0d0;
+        }
+
+        .audio-player {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .audio-player.active {
+            display: block;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .examples {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .examples h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .example-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        .example-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            border-left: 4px solid #2196f3;
+            font-size: 13px;
+            color: #1565c0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔊 Générateur de Voix Riva</h1>
+        <p class="subtitle">Convertissez votre texte en audio avec l'IA</p>
+
+        <div id="status" class="status disconnected">
+            ⚠️ Déconnecté du serveur
+        </div>
+
+        <div class="input-group">
+            <label for="textInput">📝 Votre texte:</label>
+            <textarea 
+                id="textInput" 
+                placeholder="Entrez le texte à convertir en audio..."
+            >Bonjour, je m'appelle Houda. Comment puis-je vous aider aujourd'hui?</textarea>
+        </div>
+
+        <div class="input-group">
+            <label for="voiceSelect">🎤 Voix:</label>
+            <select id="voiceSelect">
+                <option value="French-FR-Laetitia-22khz">Français - Laetitia (Femme)</option>
+                <option value="French-FR-Loic-22khz">Français - Loic (Homme)</option>
+                <option value="English-US-Female-1">English - Female</option>
+                <option value="English-US-Male-1">English - Male</option>
+            </select>
+        </div>
+
+        <div class="button-group">
+            <button id="generateBtn" onclick="generateAudio()">
+                ▶️ Générer l'audio
+            </button>
+            <button id="clearBtn" onclick="clearText()">
+                🗑️ Effacer
+            </button>
+        </div>
+
+        <div id="audioPlayer" class="audio-player">
+            <strong>🎵 Lecture audio:</strong>
+            <audio id="audio" controls></audio>
+        </div>
+
+        <div class="examples">
+            <h3>💡 Exemples rapides:</h3>
+            <div class="example-item" onclick="setExample(0)">
+                👋 Bonjour Houda, comment vas-tu aujourd'hui?
+            </div>
+            <div class="example-item" onclick="setExample(1)">
+                📚 La reconnaissance vocale est une technologie fascinante.
+            </div>
+            <div class="example-item" onclick="setExample(2)">
+                🌍 Bienvenue dans le monde de l'intelligence artificielle.
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>ℹ️ Information:</strong> Le serveur doit être démarré sur ws://localhost:8766 pour que cette application fonctionne.
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let isConnected = false;
+        let isGenerating = false;
+
+        const examples = [
+            "Bonjour Houda, comment vas-tu aujourd'hui?",
+            "La reconnaissance vocale est une technologie fascinante.",
+            "Bienvenue dans le monde de l'intelligence artificielle."
+        ];
+
+        // Connect to WebSocket server
+        function connect() {
+            try {
+                ws = new WebSocket('ws://localhost:8766');
+
+                ws.onopen = () => {
+                    console.log('✅ Connecté au serveur TTS');
+                    isConnected = true;
+                    updateStatus('connected', '✅ Connecté au serveur TTS');
+                    document.getElementById('generateBtn').disabled = false;
+                };
+
+                ws.onmessage = (event) => {
+                    if (event.data instanceof Blob) {
+                        // Audio data received
+                        console.log('🎵 Audio reçu:', event.data.size, 'bytes');
+                        playAudio(event.data);
+                        isGenerating = false;
+                        updateStatus('connected', '✅ Audio généré avec succès!');
+                        document.getElementById('generateBtn').disabled = false;
+                        document.getElementById('generateBtn').textContent = '▶️ Générer l\'audio';
+                    } else {
+                        // Status message received
+                        try {
+                            const data = JSON.parse(event.data);
+                            console.log('📨 Message:', data);
+                            
+                            if (data.type === 'info') {
+                                updateStatus('processing', '⏳ ' + data.message);
+                            } else if (data.type === 'error') {
+                                updateStatus('disconnected', '❌ ' + data.message);
+                                isGenerating = false;
+                                document.getElementById('generateBtn').disabled = false;
+                                document.getElementById('generateBtn').textContent = '▶️ Générer l\'audio';
+                            } else if (data.type === 'success') {
+                                // Will be followed by audio data
+                            }
+                        } catch (e) {
+                            console.error('Erreur parsing JSON:', e);
+                        }
+                    }
+                };
+
+                ws.onerror = (error) => {
+                    console.error('❌ Erreur WebSocket:', error);
+                    updateStatus('disconnected', '❌ Erreur de connexion');
+                    isConnected = false;
+                };
+
+                ws.onclose = () => {
+                    console.log('🔌 Déconnecté du serveur');
+                    updateStatus('disconnected', '⚠️ Déconnecté du serveur');
+                    isConnected = false;
+                    document.getElementById('generateBtn').disabled = true;
+                    
+                    // Try to reconnect after 3 seconds
+                    setTimeout(() => {
+                        console.log('🔄 Tentative de reconnexion...');
+                        connect();
+                    }, 3000);
+                };
+
+            } catch (error) {
+                console.error('❌ Erreur de connexion:', error);
+                updateStatus('disconnected', '❌ Impossible de se connecter');
+            }
+        }
+
+        function updateStatus(type, message) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status ' + type;
+            statusDiv.textContent = message;
+        }
+
+        function generateAudio() {
+            const text = document.getElementById('textInput').value.trim();
+            const voice = document.getElementById('voiceSelect').value;
+
+            if (!text) {
+                alert('⚠️ Veuillez entrer du texte');
+                return;
+            }
+
+            if (!isConnected) {
+                alert('⚠️ Non connecté au serveur');
+                return;
+            }
+
+            if (isGenerating) {
+                return;
+            }
+
+            isGenerating = true;
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('generateBtn').textContent = '⏳ Génération...';
+            updateStatus('processing', '⏳ Génération de l\'audio en cours...');
+
+            // Determine language from voice
+            let language = 'fr-FR';
+            if (voice.includes('English')) {
+                language = 'en-US';
+            }
+
+            const request = {
+                text: text,
+                voice: voice,
+                language: language
+            };
+
+            console.log('📤 Envoi requête:', request);
+            ws.send(JSON.stringify(request));
+        }
+
+        function playAudio(audioBlob) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const audio = document.getElementById('audio');
+            
+            // Create URL from blob
+            const url = URL.createObjectURL(audioBlob);
+            audio.src = url;
+            
+            // Show player and play
+            audioPlayer.classList.add('active');
+            audio.play();
+            
+            // Clean up URL after playback
+            audio.onended = () => {
+                URL.revokeObjectURL(url);
+            };
+        }
+
+        function clearText() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('textInput').focus();
+        }
+
+        function setExample(index) {
+            document.getElementById('textInput').value = examples[index];
+        }
+
+        // Auto-connect on page load
+        window.onload = () => {
+            connect();
+        };
+
+        // Allow Enter+Ctrl to generate
+        document.getElementById('textInput').addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                generateAudio();
+            }
+        });
+    </script>
+</body>
+</html>

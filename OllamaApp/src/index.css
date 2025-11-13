@@ -1,0 +1,99 @@
+/* 1) Set brand color + rgb once */
+:root {
+  --bs-primary: #005b9b;
+  --bs-primary-rgb: 255, 87, 51;
+
+  --bs-secondary: #2c3e50;
+  --bs-secondary-rgb: 44, 62, 80;
+
+  --bs-success: #27ae60;
+  --bs-success-rgb: 39, 174, 96;
+
+  --bs-danger: #e74c3c;
+  --bs-danger-rgb: 231, 76, 60;
+
+  /* optional: links follow your primary */
+  --bs-link-color: var(--bs-primary);
+  --bs-link-hover-color: color-mix(in oklab, var(--bs-primary), black 15%);
+}
+
+/* 2) Buttons use component vars, not --bs-primary directly */
+.btn-primary{
+  --bs-btn-bg: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-bg: color-mix(in oklab, var(--bs-primary), black 12%);
+  --bs-btn-hover-border-color: color-mix(in oklab, var(--bs-primary), black 15%);
+  --bs-btn-active-bg: color-mix(in oklab, var(--bs-primary), black 18%);
+  --bs-btn-active-border-color: color-mix(in oklab, var(--bs-primary), black 20%);
+  --bs-btn-disabled-bg: var(--bs-primary);
+  --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+/* 3) Alerts: map to their vars */
+.alert-primary{
+  --bs-alert-color: var(--bs-primary);
+  --bs-alert-bg: rgba(var(--bs-primary-rgb), .12);
+  --bs-alert-border-color: rgba(var(--bs-primary-rgb), .35);
+}
+
+/* 4) Badges (utility class mix) */
+.badge.bg-primary{
+  background-color: var(--bs-primary) !important;
+}
+
+/* 5) Utilities like .bg-primary rely on --bs-primary-rgb */
+.bg-primary{
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+}
+.bg-primary {
+  background-color: #005b9b !important; /* Example primary color */
+}
+
+.progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #3b8f37 !important;
+    transition: var(--bs-progress-bar-transition);
+}
+
+.assitant-body .shadow-sm {
+    background-color: #9dff68 !important;
+}
+.card-title{
+    font-size: 1.2rem !important;
+    font-weight: 700;
+    color: #2e9132;
+    margin-bottom: 20px;
+}
+
+#root{
+    background: #005693;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 20px;
+}
+.text-muted {
+    color: #fff !important;
+}
+
+.delete-btn {
+    color: #fff !important;
+    background-color: #e74c3c !important;
+    border-color: #e74c3c !important;
+}
+.card {
+    background-color: #fff !important;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px !important;
+}

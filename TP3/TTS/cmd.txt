@@ -1,0 +1,51 @@
+py -3.11 -V
+py -3.11 -m venv tts311
+source tts311/Scripts/activate
+python -m pip install -U pip wheel setuptools
+pip install "TTS==0.22.0"
+
+
+
+tts --text "Bonjour, ceci est un test de synthèse vocale." \
+    --model_name "tts_models/fr/css10/vits" \
+    --out_path out.wav
+
+
+
+python -m pip install --upgrade pip setuptools wheel
+
+
+$ pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+
+
+python -m uvicorn main:app --reload --port 5005
+
+
+
+to use model 2 
+
+pip uninstall -y torch torchvision torchaudio
+pip cache purge
+
+pip install torch==2.5.1+cu128 torchvision==0.20.1+cu128 torchaudio==2.5.1+cu128 ^
+  --index-url https://download.pytorch.org/whl/cu128
+
+
+
+
+
+V2 TTS 
+
+py -3.11 -m venv ttsv2
+
+pip install torch==2.5.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+pip install fastapi uvicorn[standard]
+pip install TTS transformers==4.33.0
+
+if error
+pip install --force-reinstall transformers==4.33.0
+python -m uvicorn main:app --reload --port 5005
+
+curl -X POST "http://127.0.0.1:5005/tts/wav"   -H "Content-Type: application/json"   -d "{\"text\":\"Bonjour ! Je suis Chaabi Lil Iskan Assistant, ravi de vous rencontrer.\",\"speaker_wav\":\"D:/Chaabi-iskane/mon_audio.wav\",\"language\":\"fr\"}"   --output output.wav
+curl -X POST "http://127.0.0.1:5005/tts/wav"   -H "Content-Type: application/json"   -d "{\"text\":\"Bonjour ! Je suis Chaabi Lil Iskan Assistant, ravi de vous rencontrer.\",\"language\":\"fr\"}"   --output output.wav

@@ -1,0 +1,191 @@
+# ==========================================
+# 🔹 GLOBAL IGNORE FILE
+# ==========================================
+
+# ==========================================
+# 🧱 .NET / Visual Studio
+# ==========================================
+bin/
+obj/
+out/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+TestResults/
+artifacts/
+publish/
+coverage/
+*.coverage
+*.coveragexml
+*.trx
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.idea/
+.vscode/
+*.ncrunch*
+*.nunit.xml
+*.resharper
+*.DotSettings.user
+
+# ==========================================
+# ⚙️ .NET Generated / Cache Files
+# ==========================================
+*.dll
+*.exe
+*.pdb
+*.app
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+*.msp
+*.msm
+*.cache
+*.log
+*.dmp
+*.tmp
+*.bak
+*.orig
+*.old
+
+# ==========================================
+# 🧩 Packages / NuGet
+# ==========================================
+*.nupkg
+*.snupkg
+*.nuspec
+*.nuget
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# ==========================================
+# 🧰 ASP.NET / EF / Config
+# ==========================================
+*.dbmdl
+*.jfm
+appsettings.*.local.json
+appsettings.Development.json
+appsettings.Secret.json
+secrets.json
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+*.pfx
+*.cer
+*.crt
+*.key
+
+# ==========================================
+# 🧱 DOCKER
+# ==========================================
+**/Dockerfile.local
+**/Dockerfile.dev
+**/docker-compose.override.yml
+**/.docker/
+docker-compose.override.yml
+*.env
+*.env.local
+
+# ==========================================
+# 🧠 REACT / NODE.JS FRONTEND
+# ==========================================
+# Dependencies
+node_modules/
+bower_components/
+jspm_packages/
+
+# Build outputs
+build/
+dist/
+.tern-port
+.npm/
+.npmrc
+.eslintcache
+.next/
+out/
+.cache/
+.cache-loader/
+.yarn/
+.yarn-cache/
+.yarn-integrity
+.pnp/
+.pnp.js
+package-lock.json
+yarn.lock
+*.tsbuildinfo
+
+# Testing
+coverage/
+*.lcov
+jest-html-reporters-*
+cypress/videos/
+cypress/screenshots/
+playwright-report/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.psd
+~$*
+
+# Local development
+.DS_Store
+Thumbs.db
+desktop.ini
+*.pid
+*.seed
+*.tgz
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ==========================================
+# 🧾 DOCUMENTATION / GENERATED FILES
+# ==========================================
+docs/generated/
+api-reference/
+*.md.html
+*.md.pdf
+
+# ==========================================
+# 💾 OPTIONAL – DATA / MODELS / CACHE
+# ==========================================
+data/
+datasets/
+models/
+cache/
+temp/
+notebooks/
+
+# ==========================================
+# 🚫 SYSTEM FILES
+# ==========================================
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+desktop.ini
+
+tts_env/
+*/tts_env/*
+tts_env/*
+
+
+# ==========================================
+# ✅ END OF FILE
+# ==========================================

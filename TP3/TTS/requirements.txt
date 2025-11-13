@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+TTS==0.22.0
+numpy
+scipy
+soundfile
+librosa
+torch
+torchvision
+torchaudio
+setuptools<81
